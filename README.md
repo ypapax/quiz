@@ -5,3 +5,7 @@ Q: Given a list of words like https://github.com/NodePrime/quiz/blob/master/word
 
 
 Fork this repo, add your solution and documentation on how to compile and run your solution. Please send us a link to your repo.
+
+Obviously, we are looking for a fresh solution, not based on others' code.
+
+
