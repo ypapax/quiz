@@ -1,3 +1,5 @@
+Please only do this exercise when explicitly asked. This is for select candidates only. 
+
 #Exercise 1
 
 The `slsdir` contains `primary` which contains a directory with an ID of a machine, a random number.
