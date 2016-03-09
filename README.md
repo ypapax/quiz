@@ -53,3 +53,5 @@ It consists of the following words:
 ### `getCompoundParts` algorithm
 Function `func getCompoundParts(wholeWord string, parts []string) (validParts []string)`. It cut off begin and end of `wholeWord` reducing number of `parts` by 2 and calls itself with shorter `wholeWord` and lower length `parts` until has trivial cases when `parts` length is one or two.
 
+# Solution author
+Maxim Yefremov [upwork profile](https://www.upwork.com/o/profiles/users/_~012ca70e652c74ed7c/)
