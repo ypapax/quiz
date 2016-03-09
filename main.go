@@ -20,7 +20,9 @@ func main() {
 		return
 	}
 	words := strings.Split(string(fileBytes), "\n")
+	fmt.Println("inputted words count", len(words))
 	compound, parts := FindLongestCompound(words)
+
 	if len(compound) == 0 {
 		fmt.Println("no result")
 		return
@@ -36,7 +38,9 @@ func FindLongestCompound(words []string) (compound string, parts []string) {
 	// longest goes first
 	sortedWords := sortByLength(words)
 	resultCandidates := make(map[string][]string)
+
 	for _, compoundWordCanidate := range sortedWords {
+
 		for _, partWordCandidate := range sortedWords {
 			if compoundWordCanidate == partWordCandidate {
 				continue
@@ -46,31 +50,95 @@ func FindLongestCompound(words []string) (compound string, parts []string) {
 			}
 			resultCandidates[compoundWordCanidate] = append(
 				resultCandidates[compoundWordCanidate], partWordCandidate)
-			validPermutation := isCompound(compoundWordCanidate, resultCandidates[compoundWordCanidate])
-			if len(validPermutation) == 0 {
+			validParts := isCompound(compoundWordCanidate, resultCandidates[compoundWordCanidate])
+			if len(validParts) == 0 {
 				continue
 			}
 			compound = compoundWordCanidate
-			parts = validPermutation
+			parts = validParts
+			return
 		}
 	}
 	return
 }
 
-func isCompound(wholeWord string, parts []string) (validPermutation []string) {
-	if len(parts) < 2 {
+func getBeginEndInternal(wholeWord string, parts []string) (begin, end, internal string, internalPartsCandidates []string) {
+	if len(parts) == 0 {
 		return
 	}
-	permutations := getPermutations(parts)
-
-	for _, permutation := range permutations {
-		if wholeWord == strings.Join(permutation, "") {
-			validPermutation = permutation
+	if len(parts) == 1 {
+		if wholeWord == parts[0] {
+			begin = parts[0]
+			end = begin
 			return
 		}
+	}
+	var begin_i, end_i int
+	for i, part := range parts {
+		if strings.HasPrefix(wholeWord, part) {
+			begin = part
+			begin_i = i
+		}
+		if strings.HasSuffix(wholeWord, part) {
+			end = part
+			end_i = i
+		}
+	}
+	if len(begin) == 0 || len(end) == 0 {
+		return
+	}
 
+	internal = strings.Replace(wholeWord, begin, "", 1)
+	internal = strings.Replace(internal, end, "", 1)
+	if end_i < begin_i {
+		end_i, begin_i = begin_i, end_i
+	}
+	parts = removeElement(parts, begin_i)
+	if begin != end {
+		parts = removeElement(parts, end_i-1)
+	}
+	internalPartsCandidates = parts
+	return
+}
+
+func isCompound(wholeWord string, parts []string) (validParts []string) {
+	begin, end, internal, internalPartsCandidates := getBeginEndInternal(wholeWord, parts)
+	if len(begin) == 0 || len(end) == 0 {
+		return
+	}
+	if begin == end && internal == "" {
+		validParts = []string{begin}
+		return
+	}
+	if begin+end == wholeWord {
+		validParts = []string{begin, end}
+		return
+	}
+
+	validInternalWordParts := isCompound(internal, internalPartsCandidates)
+	if len(validInternalWordParts) == 0 {
+		return
+	}
+	validParts = append(validParts, begin)
+	validParts = append(validParts, validInternalWordParts...)
+	validParts = append(validParts, end)
+	return
+}
+
+func lettersCount(parts []string) (count int) {
+	for _, part := range parts {
+		count += len(part)
 	}
 	return
+}
+
+func removeElement(slice []string, i int) []string {
+	if i < len(slice)-1 {
+		slice = append(slice[:i], slice[i+1:]...)
+	} else {
+		slice = slice[:i]
+	}
+	return slice
 }
 
 func getArgument(argNumber int) (argValue string) {
