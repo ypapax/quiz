@@ -25,8 +25,8 @@ It consists of the following words:
 ```
 
 ## Algorithm
-1. Since we want the biggest compound word, sort all the words by length - biggest goes first
-2. For each word (`compoundWordCandidate`) starting from the first (biggest), find other words - its substrings and put them to `subWords` slice.
+- Since we want the biggest compound word, sort all the words by length - biggest goes first
+- For each word (`compoundWordCandidate`) starting from the first (biggest), find other words - its substrings and put them to `subWords` slice.
 ```
   for _, compoundWordCandidate := range sortedWords {
     var subWords []string
@@ -48,10 +48,10 @@ It consists of the following words:
     }
   }
 ```
-3. After every append to `subWords`, check if the slice has length more than 1 and try to build the current `compoundWordCandidate` from `subWords` using method `getCompoundParts`. If it returns positive length slice, that's it. Current `compoundWordCandidate` is the result of the program - the longest compound word. It consists of `validParts`.
+- After every append to `subWords`, check if the slice has length more than 1 and try to build the current `compoundWordCandidate` from `subWords` using method `getCompoundParts`. If it returns positive length slice, that's it. Current `compoundWordCandidate` is the result of the program - the longest compound word. It consists of `validParts`.
 
-### `getCompoundParts` algorithm
-Function `func getCompoundParts(wholeWord string, parts []string) (validParts []string)` cuts off beginning and end of `wholeWord` reducing number of possible `parts` by 2 and calls itself with shorter `wholeWord` and lower length `parts` until has trivial cases when `parts` length is one or two.
 
-# Solution author
+- Function `func getCompoundParts(wholeWord string, parts []string) (validParts []string)` cuts off beginning and end of `wholeWord` reducing number of possible `parts` by 2 and calls itself with shorter `wholeWord` and lower length `parts` until has trivial cases when `parts` length is one or two.
+
+## Solution author
 Maxim Yefremov [upwork profile](https://www.upwork.com/o/profiles/users/_~012ca70e652c74ed7c/)
