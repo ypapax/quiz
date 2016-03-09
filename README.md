@@ -26,7 +26,7 @@ It consists of the following words:
 
 ## Algorithm
 1. Since we want the biggest compound word, sort all the words by length - biggest goes first
-2. For each word starting from the first (biggest), find other words which first word contains and put this sub words to `subWords` slice.
+2. For each word (`compoundWordCandidate`) starting from the first (biggest), find other words - its substrings and put them to `subWords` slice.
 ```
   for _, compoundWordCandidate := range sortedWords {
     var subWords []string
