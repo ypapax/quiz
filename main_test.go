@@ -28,8 +28,8 @@ func TestFindLongestCompound(t *testing.T) {
 	}
 }
 
-func Test_isCompound_(t *testing.T) {
-	validPermutation := isCompound("bedroomman", []string{"man", "bed", "room"})
+func Test_getCompoundParts_(t *testing.T) {
+	validPermutation := getCompoundParts("bedroomman", []string{"man", "bed", "room"})
 	expectedJson := `[
    "bed",
    "room",
@@ -37,12 +37,12 @@ func Test_isCompound_(t *testing.T) {
 ]`
 	if actualJson := ToJson(validPermutation); actualJson != expectedJson {
 		ActualExpected(actualJson, expectedJson)
-		t.Error("isCompound not working")
+		t.Error("getCompoundParts not working")
 	}
 }
 
-func Test_isCompound4(t *testing.T) {
-	validPermutation := isCompound("bedroomman", []string{"man", "dro", "bed", "room"})
+func Test_getCompoundParts4(t *testing.T) {
+	validPermutation := getCompoundParts("bedroomman", []string{"man", "dro", "bed", "room"})
 	expectedJson := `[
    "bed",
    "room",
@@ -50,11 +50,11 @@ func Test_isCompound4(t *testing.T) {
 ]`
 	if actualJson := ToJson(validPermutation); actualJson != expectedJson {
 		ActualExpected(actualJson, expectedJson)
-		t.Error("isCompound not working")
+		t.Error("getCompoundParts not working")
 	}
 }
 
-func Test_isCompound12(t *testing.T) {
+func Test_getCompoundParts12(t *testing.T) {
 	inputJson := `[
    "ultramicroscopic",
    "microscopic",
@@ -71,14 +71,14 @@ func Test_isCompound12(t *testing.T) {
 ]`
 	var input []string
 	FromJson(inputJson, &input)
-	validPermutation := isCompound("pneumonoultramicroscopicsilicovolcanoconiosis", input)
+	validPermutation := getCompoundParts("pneumonoultramicroscopicsilicovolcanoconiosis", input)
 
 	if len(validPermutation) > 0 {
 		t.Error("must be empty")
 	}
 }
 
-func Test_isCompound31(t *testing.T) {
+func Test_getCompoundParts31(t *testing.T) {
 	inputJson := `[
    "diphenyl",
    "ethanes",
@@ -114,7 +114,7 @@ func Test_isCompound31(t *testing.T) {
 ]`
 	var input []string
 	FromJson(inputJson, &input)
-	validPermutation := isCompound("dichlorodiphenyltrichloroethanes", input)
+	validPermutation := getCompoundParts("dichlorodiphenyltrichloroethanes", input)
 
 	if len(validPermutation) > 0 {
 		t.Error("must be empty")

@@ -13,6 +13,7 @@ func main() {
 	if len(wordsListPath) == 0 {
 		fmt.Println("usage:")
 		fmt.Println("quiz /path/to/word.list")
+		return
 	}
 	fileBytes, err := ioutil.ReadFile(wordsListPath)
 	if err != nil {
@@ -29,6 +30,8 @@ func main() {
 	}
 	fmt.Println("The longest compound word is")
 	fmt.Println(compound)
+	fmt.Println("It has", len(compound), "characters")
+
 	fmt.Println("It consists of the following words:")
 	fmt.Println(parts)
 }
@@ -37,24 +40,21 @@ func FindLongestCompound(words []string) (compound string, parts []string) {
 	// sort words by length
 	// longest goes first
 	sortedWords := sortByLength(words)
-	resultCandidates := make(map[string][]string)
-
-	for _, compoundWordCanidate := range sortedWords {
-
+	for _, compoundWordCandidate := range sortedWords {
+		var subWords []string
 		for _, partWordCandidate := range sortedWords {
-			if compoundWordCanidate == partWordCandidate {
+			if compoundWordCandidate == partWordCandidate {
 				continue
 			}
-			if !strings.Contains(compoundWordCanidate, partWordCandidate) {
+			if !strings.Contains(compoundWordCandidate, partWordCandidate) {
 				continue
 			}
-			resultCandidates[compoundWordCanidate] = append(
-				resultCandidates[compoundWordCanidate], partWordCandidate)
-			validParts := isCompound(compoundWordCanidate, resultCandidates[compoundWordCanidate])
+			subWords = append(subWords, partWordCandidate)
+			validParts := getCompoundParts(compoundWordCandidate, subWords)
 			if len(validParts) == 0 {
 				continue
 			}
-			compound = compoundWordCanidate
+			compound = compoundWordCandidate
 			parts = validParts
 			return
 		}
@@ -101,7 +101,7 @@ func getBeginEndInternal(wholeWord string, parts []string) (begin, end, internal
 	return
 }
 
-func isCompound(wholeWord string, parts []string) (validParts []string) {
+func getCompoundParts(wholeWord string, parts []string) (validParts []string) {
 	begin, end, internal, internalPartsCandidates := getBeginEndInternal(wholeWord, parts)
 	if len(begin) == 0 || len(end) == 0 {
 		return
@@ -115,7 +115,7 @@ func isCompound(wholeWord string, parts []string) (validParts []string) {
 		return
 	}
 
-	validInternalWordParts := isCompound(internal, internalPartsCandidates)
+	validInternalWordParts := getCompoundParts(internal, internalPartsCandidates)
 	if len(validInternalWordParts) == 0 {
 		return
 	}
