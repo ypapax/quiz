@@ -40,16 +40,32 @@ func FindLongestCompound(words []string) (compound string, parts []string) {
 	// sort words by length
 	// longest goes first
 	sortedWords := sortByLength(words)
-	for _, compoundWordCandidate := range sortedWords {
+	for i, compoundWordCandidate := range sortedWords {
 		var subWords []string
-		for _, partWordCandidate := range sortedWords {
+		for j, partWordCandidate := range sortedWords {
+			if j <= i {
+				continue
+			}
 			if compoundWordCandidate == partWordCandidate {
+				continue
+			}
+			// not interested in empty sub words
+			if len(partWordCandidate) == 0 {
 				continue
 			}
 			if !strings.Contains(compoundWordCandidate, partWordCandidate) {
 				continue
 			}
+
+			if contains(subWords, partWordCandidate) {
+				continue
+			}
+
 			subWords = append(subWords, partWordCandidate)
+			// a word is minimum compound of 2
+			if len(subWords) < 2 {
+				continue
+			}
 			validParts := getCompoundParts(compoundWordCandidate, subWords)
 			if len(validParts) == 0 {
 				continue
@@ -60,6 +76,15 @@ func FindLongestCompound(words []string) (compound string, parts []string) {
 		}
 	}
 	return
+}
+
+func contains(slice []string, newItem string) bool {
+	for _, item := range slice {
+		if item == newItem {
+			return true
+		}
+	}
+	return false
 }
 
 func getBeginEndInternal(wholeWord string, parts []string) (begin, end, internal string, internalPartsCandidates []string) {
@@ -82,6 +107,9 @@ func getBeginEndInternal(wholeWord string, parts []string) (begin, end, internal
 		if strings.HasSuffix(wholeWord, part) {
 			end = part
 			end_i = i
+		}
+		if len(begin) > 0 && len(end) > 0 {
+			break
 		}
 	}
 	if len(begin) == 0 || len(end) == 0 {

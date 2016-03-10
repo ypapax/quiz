@@ -29,26 +29,26 @@ func TestFindLongestCompound(t *testing.T) {
 }
 
 func Test_getCompoundParts_(t *testing.T) {
-	validPermutation := getCompoundParts("bedroomman", []string{"man", "bed", "room"})
+	validParts := getCompoundParts("bedroomman", []string{"man", "bed", "room"})
 	expectedJson := `[
    "bed",
    "room",
    "man"
 ]`
-	if actualJson := ToJson(validPermutation); actualJson != expectedJson {
+	if actualJson := ToJson(validParts); actualJson != expectedJson {
 		ActualExpected(actualJson, expectedJson)
 		t.Error("getCompoundParts not working")
 	}
 }
 
 func Test_getCompoundParts4(t *testing.T) {
-	validPermutation := getCompoundParts("bedroomman", []string{"man", "dro", "bed", "room"})
+	validParts := getCompoundParts("bedroomman", []string{"man", "dro", "bed", "room"})
 	expectedJson := `[
    "bed",
    "room",
    "man"
 ]`
-	if actualJson := ToJson(validPermutation); actualJson != expectedJson {
+	if actualJson := ToJson(validParts); actualJson != expectedJson {
 		ActualExpected(actualJson, expectedJson)
 		t.Error("getCompoundParts not working")
 	}
@@ -71,9 +71,9 @@ func Test_getCompoundParts12(t *testing.T) {
 ]`
 	var input []string
 	FromJson(inputJson, &input)
-	validPermutation := getCompoundParts("pneumonoultramicroscopicsilicovolcanoconiosis", input)
+	validParts := getCompoundParts("pneumonoultramicroscopicsilicovolcanoconiosis", input)
 
-	if len(validPermutation) > 0 {
+	if len(validParts) > 0 {
 		t.Error("must be empty")
 	}
 }
@@ -114,10 +114,88 @@ func Test_getCompoundParts31(t *testing.T) {
 ]`
 	var input []string
 	FromJson(inputJson, &input)
-	validPermutation := getCompoundParts("dichlorodiphenyltrichloroethanes", input)
+	validParts := getCompoundParts("dichlorodiphenyltrichloroethanes", input)
 
-	if len(validPermutation) > 0 {
+	if len(validParts) > 0 {
 		t.Error("must be empty")
+	}
+}
+
+func Test_getCompoundParts29(t *testing.T) {
+	inputJson := `[
+   "dis",
+   "anti",
+   "establishmentarianisms"
+]`
+	var input []string
+	FromJson(inputJson, &input)
+	validParts := getCompoundParts("antidisestablishmentarianisms", input)
+	expectedJson := `[
+   "anti",
+   "dis",
+   "establishmentarianisms"
+]`
+	if actualJson := ToJson(validParts); actualJson != expectedJson {
+		ActualExpected(actualJson, expectedJson)
+		t.Error("not valid")
+	}
+}
+
+func Test_getCompoundParts29Full(t *testing.T) {
+	inputJson := `[
+   "establishmentarianisms",
+   "establishmentarianism",
+   "establishment",
+   "stablishment",
+   "establish",
+   "stablish",
+   "menta",
+   "ment",
+   "stab",
+   "anis",
+   "anti",
+   "aria",
+   "ism",
+   "ish",
+   "nis",
+   "lis",
+   "est",
+   "tar",
+   "tab",
+   "tid",
+   "dis",
+   "ani",
+   "ria",
+   "ant",
+   "men",
+   "dis",
+   "sh",
+   "en",
+   "id",
+   "hm",
+   "es",
+   "st",
+   "ab",
+   "me",
+   "ta",
+   "li",
+   "an",
+   "is",
+   "ti",
+   "di",
+   "ar"
+]`
+	var input []string
+	FromJson(inputJson, &input)
+	validParts := getCompoundParts("antidisestablishmentarianisms", input)
+	expectedJson := `[
+   "anti",
+   "dis",
+   "establishmentarianisms"
+]`
+	if actualJson := ToJson(validParts); actualJson != expectedJson {
+		ActualExpected(actualJson, expectedJson)
+		t.Error("not valid")
 	}
 }
 
@@ -166,5 +244,79 @@ func Test_getBeginEndInternalDirect(t *testing.T) {
 	}
 	if len(internalPartsCandidates) != 0 {
 		t.Error("not valid internalPartsCandidates", internalPartsCandidates)
+	}
+}
+
+func Test_getBeginEndInternal29(t *testing.T) {
+	wholeWord := "antidisestablishmentarianisms"
+	inputJson := `[
+   "establishmentarianisms",
+   "establishmentarianism",
+   "establishment",
+   "stablishment",
+   "establish",
+   "stablish",
+   "menta",
+   "ment",
+   "stab",
+   "anis",
+   "anti",
+   "aria",
+   "ism",
+   "ish",
+   "dis",
+   "nis",
+   "lis",
+   "est",
+   "tar",
+   "tab",
+   "tid",
+   "ani",
+   "ria",
+   "ant",
+   "men",
+   "dis",
+   "sh",
+   "en",
+   "id",
+   "hm",
+   "es",
+   "st",
+   "ab",
+   "me",
+   "ta",
+   "li",
+   "an",
+   "is",
+   "ti",
+   "di",
+   "ar"
+]`
+	var input []string
+	FromJson(inputJson, &input)
+
+	begin, end, internal, _ := getBeginEndInternal(wholeWord, input)
+	if begin != "anti" {
+		t.Error("not valid begin", begin)
+	}
+	if end != "establishmentarianisms" {
+		t.Error("not valid end")
+	}
+	if internal != "dis" {
+		t.Error("not valid internal", internal)
+	}
+}
+
+func Test_contains(t *testing.T) {
+	inputJson := `[
+   "establishmentarianism",
+   "establishmentarianism",
+   "establishmentarianism",
+   "ar"
+]`
+	var input []string
+	FromJson(inputJson, &input)
+	if !contains(input, "establishmentarianism") {
+		t.Error("contains not working")
 	}
 }

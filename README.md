@@ -15,13 +15,13 @@ Obviously, we are looking for a fresh solution, not based on others' code.
 
 ## Run
 ```
-./quiz /path/to/word.list
+$ ./quiz /path/to/word.list
 inputted words count 263534
 The longest compound word is
-electroencephalographically
-It has 27 characters
+antidisestablishmentarianisms
+It has 29 characters
 It consists of the following words:
-[electro encephalographically]
+[anti disestablishmentarian isms]
 ```
 
 ## Algorithm
